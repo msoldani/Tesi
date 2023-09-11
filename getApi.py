@@ -18,13 +18,8 @@ def make_api_call(api_url, parameter_name, parameter_artist):
     #print(parameter_name, parameter_artist, concatenated_string)
     try:
         response = requests.get(api_url)
-
-        content = response.text
         
         if response.status_code == 200:
-            if "error" in content:
-                return ""
-            else:
                 return response.json()  # Assuming the API response is in JSON format
         else:
             return None
@@ -47,7 +42,8 @@ api_column_artist = 'artists'
 # Read the CSV file and make API calls for each row
 with open(csv_file_path, 'r') as file:
     csv_reader = csv.DictReader(file)
-
+    
+    risultato_tag = []
     for row in csv_reader:
         # Get the value from the specified column for the API call
         api_parameter_name = row[api_column_name]
@@ -55,15 +51,34 @@ with open(csv_file_path, 'r') as file:
         list(api_parameter_artist)
         # Make the API call using the obtained value
         api_result = make_api_call(api_url, api_parameter_name, api_parameter_artist)
-        if "error" not in api_result:
-            print("Ciao")
+        if "error" in api_result:
+            risultato_tag.append("Errore")
+        else:     
+            tags_list = api_result['toptags']['tag']
+            # Extract the 'name' values from each tag dictionary
+            tag_names = [tag['name'] for tag in tags_list]
+            # 'tag_names' now contains the individual tag names
+            if len(tag_names) == 0:
+                risultato_tag.append("Errore")
+            else:
+                risultato_tag.append(tag_names)
         #print(api_result['error'])
 
+print(risultato_tag)
 
+df = pd.read_csv(csv_file_path, encoding='latin1')
+
+# Create a new column 'Occupation' with values from the list
+new_column_values = risultato_tag
+df['tags'] = new_column_values
+
+# Write the modified DataFrame back to the CSV file
+df.to_csv(csv_file_path, index=False)
+#for tag in risultato[0]['toptags']:
+ #    print(tag)
 
         #if api_result is not None:
             # Process or print the API result as needed
         #   print(f'API result for row with {api_column_name}={api_parameter_value}: {api_result}')
         #else:
         #    print(f'API call failed for row with {api_column_name}={api_parameter_value}')
-
