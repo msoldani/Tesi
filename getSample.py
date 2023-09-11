@@ -8,7 +8,7 @@ output_csv_path = 'sample_tracks.csv'  # Replace with the desired output file pa
 sample_size = 10  # Replace with the desired sample size
 
 # Create a list of row indices to sample from
-with open(input_csv_path, 'r', encoding="utf8") as input_file:
+with open(input_csv_path, 'r', encoding="utf-8") as input_file:
     csv_reader = csv.reader(input_file)
     header = next(csv_reader)  # Read the header row (optional)
     all_rows = list(csv_reader)
