@@ -5,7 +5,7 @@ input_csv_path = 'tracks_features.csv'  # Replace with the path to your input CS
 output_csv_path = 'sample_tracks.csv'  # Replace with the desired output file path
 
 # Determine the number of rows you want in your sample
-sample_size = 300  # Replace with the desired sample size
+sample_size = 200000  # Replace with the desired sample size
 
 # Create a list of row indices to sample from
 with open(input_csv_path, 'r', encoding="latin1") as input_file:
