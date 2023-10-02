@@ -18,16 +18,36 @@ columns_to_normalize = ['danceability', 'energy', 'loudness', 'speechiness', 'ac
 # Normalize each row so that the sum is equal to 1
 row_sums = df[columns_to_normalize].sum(axis=1)
 df[columns_to_normalize] = df[columns_to_normalize].div(row_sums, axis=0)
+row_sums = df[columns_to_normalize].sum(axis=1)
+print(row_sums)
+
+for column in columns_to_normalize:
+    
+    #x_min = df[column].min()
+    #x_max = df[column].max()
+    #df[column] = (df[column] - x_min) / (x_max - x_min)
+
+    column_sums = df[column].sum()
+    df[column] = df[column].div(column_sums)
+    column_sums = df[column].sum()
 
 
-column_sums = df[columns_to_normalize].sum()
-df[columns_to_normalize] = df[columns_to_normalize].div(column_sums, axis=1)
+
+
+#min = df['energy'].min()
+#max = df['energy'].max()
+#df['energy'] = (df['energy'] - min) / (max - min)
+#print(df)
+#print(min,max)
+#
 
 # Specify the path for the CSV file with normalized values
-normalized_file_path = 'normalized_data2.csv'
+normalized_file_path = 'normalized_data3.csv'
 
 # Save the DataFrame with normalized values to a new CSV file
-df.to_csv(normalized_file_path, index=False)
+df.to_csv(normalized_file_path, index=False, float_format='%.6f')
+df_read = pd.read_csv(normalized_file_path)
+print(df_read[columns_to_normalize])
 
 print(f"Normalized data saved to {normalized_file_path}")
 
